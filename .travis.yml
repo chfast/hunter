@@ -48,12 +48,10 @@ matrix:
         TOOLCHAIN=android-ndk-r17-api-24-arm64-v8a-clang-libcxx14
         PROJECT_DIR=examples/intx
 
-    # FIXME: The clang analyzer reports warnings.
-    # https://travis-ci.org/chfast/hunter/jobs/525003020
-    # - os: linux
-    #   env: >
-    #     TOOLCHAIN=analyze-cxx17
-    #     PROJECT_DIR=examples/intx
+    - os: linux
+      env: >
+        TOOLCHAIN=analyze-cxx17
+        PROJECT_DIR=examples/intx
 
     - os: linux
       env: >
