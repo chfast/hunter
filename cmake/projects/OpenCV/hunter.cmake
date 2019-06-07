@@ -16,11 +16,55 @@ hunter_add_version(
     PACKAGE_NAME
     OpenCV
     VERSION
+    "4.0.0-p3"
+    URL
+    "https://github.com/hunter-packages/opencv/archive/v4.0.0-p3.tar.gz"
+    SHA1
+    f28f59b2fcd96f2b95fb8501be043662b20d3d55
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    OpenCV
+    VERSION
+    "4.0.0-p2"
+    URL
+    "https://github.com/hunter-packages/opencv/archive/v4.0.0-p2.tar.gz"
+    SHA1
+    936414fd01ead11f6dd9b360cd477ab278eeaac6
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    OpenCV
+    VERSION
     "4.0.0-p0"
     URL
     "https://github.com/hunter-packages/opencv/archive/v4.0.0-p0.tar.gz"
     SHA1
     90680ea3b971c2323e0049c48fa7867a1fd9f3fe
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    OpenCV
+    VERSION
+    "3.4.6-p0"
+    URL
+    "https://github.com/hunter-packages/opencv/archive/v3.4.6-p0.tar.gz"
+    SHA1
+    70f4da99e5d824c463848d4df8667d5d705af141
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    OpenCV
+    VERSION
+    "3.4.3-p4"
+    URL
+    "https://github.com/hunter-packages/opencv/archive/v3.4.3-p4.tar.gz"
+    SHA1
+    f1af13fd24cdb433240b1046b5e1391bb19ee748
 )
 
 hunter_add_version(
@@ -436,6 +480,7 @@ hunter_cmake_args(
         BUILD_opencv_dnn=OFF
         # Fix for https://travis-ci.org/ingenue/hunter/builds/452039597
         WITH_OPENEXR=OFF
+        WITH_FFMPEG=OFF
 )
 
 # Pick a download scheme

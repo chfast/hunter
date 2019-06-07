@@ -27,7 +27,7 @@ modification of the
 
 .. note::
 
-  The code was tested with Android Studio 3.3
+  The code was tested with Android Studio: 3.3, 3.4.1, 3.5 beta 2
 
 Check you have at least CMake 3.9.2. Such a requirement needed to work with
 `Android NDK r16+ <https://gitlab.kitware.com/cmake/cmake/issues/17253>`__:
@@ -93,7 +93,8 @@ Android Studio to default locations):
 
 .. warning::
 
-  Android NDK r19+ is :ref:`not supported <android ndk r19>`.
+  Android NDK r19+ is :ref:`not supported <android ndk r19>`. You **have to**
+  switch to a lower version explicitly, e.g. to NDK r18b.
 
 Please check that ``cmake.dir`` has such value that ``<cmake.dir>/bin/cmake``
 executable exists.
