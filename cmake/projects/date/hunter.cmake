@@ -20,7 +20,7 @@ hunter_add_version(
     4ed983e1d19ee28bc565bd62907d203304b38cf7
 )
 
-hunter_cmake_args(date CMAKE_ARGS USE_SYSTEM_TZ_DB=ON)
+hunter_cmake_args(date CMAKE_ARGS ENABLE_DATE_TESTING=OFF USE_SYSTEM_TZ_DB=ON)
 
 hunter_pick_scheme(DEFAULT url_sha1_cmake)
 hunter_cacheable(date)

@@ -17,6 +17,6 @@ target_link_libraries(foo PUBLIC Boost::system)
 
 file(GLOB_RECURSE boost_configs "${BOOST_ROOT}/*/BoostConfig.cmake")
 list(LENGTH boost_configs len)
-if(NOT len EQUAL "1")
-  message(FATAL_ERROR "More than one *Config: ${boost_configs}")
+if(NOT len GREATER "0")
+  message(FATAL_ERROR "Not even one *Config: ${boost_configs}")
 endif()
