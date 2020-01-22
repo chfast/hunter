@@ -30,6 +30,7 @@ include(CMakeParseArguments)
 
 include(hunter_dump_cmake_flags)
 include(hunter_fatal_error)
+include(hunter_user_error)
 include(hunter_get_build_flags)
 include(hunter_get_toolchain_binaries)
 include(hunter_internal_error)
@@ -76,7 +77,7 @@ function(hunter_autotools_configure_command out_command_line)
     if(has_configure_host)
       set(configure_host --host=${PARAM_CONFIGURE_HOST})
     else()
-      hunter_fatal_error("hunter_autotools_configure_command on iOS build must supply a CONFIGURE_HOST")
+      hunter_user_error("hunter_autotools_configure_command on iOS build must supply a CONFIGURE_HOST")
     endif()
   elseif(is_cross_compile)
     set(configure_host --host=${CROSS_COMPILE_TOOLCHAIN_PREFIX})
@@ -88,6 +89,7 @@ function(hunter_autotools_configure_command out_command_line)
   set(configure_command)
 
   list(APPEND configure_command "./configure")
+
   string(COMPARE NOTEQUAL "${configure_host}" "" has_configure_host)
   if(has_configure_host)
     list(APPEND configure_command ${configure_host})
@@ -161,7 +163,7 @@ function(hunter_autotools_configure_command out_command_line)
   if(NOT "${len}" EQUAL "1")
     hunter_fatal_error(
         "Autotools PACKAGE_CONFIGURATION_TYPES has ${len} elements: ${PARAM_PACKAGE_CONFIGURATION_TYPES}. Only 1 is allowed"
-        WIKI "autools.package.configuration.types"
+        ERROR_PAGE "autools.package.configuration.types"
     )
   endif()
   string(TOUPPER ${PARAM_PACKAGE_CONFIGURATION_TYPES} config_type)
@@ -217,6 +219,13 @@ function(hunter_autotools_configure_command out_command_line)
   endif()
 
   list(APPEND configure_command "--prefix=${PARAM_PACKAGE_INSTALL_DIR}")
+
+  # See: https://github.com/ruslo/hunter/pull/1910#discussion_r300725504
+  list(
+      APPEND
+      configure_command
+      "--with-pkg-config-libdir=${PARAM_PACKAGE_INSTALL_DIR}/lib/pkgconfig"
+  )
 
   if(HUNTER_STATUS_DEBUG)
     string(REPLACE ";" " " final_configure_command "${configure_command}")

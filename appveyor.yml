@@ -4,40 +4,41 @@ environment:
   global:
     # This variable used only if '--upload' added to 'jenkins.py'
     GITHUB_USER_PASSWORD:
-      secure: 9/qGB8wlVXAbzkn7xyfK4JJbaRJ/Uh8UwYXX0DcFqzTFDjc1aSGK5eNtyxWIpvmt
+      secure: LNJ5FPxb7CPXpslLdb63M1Z2344XY5kxQOsnE1RQ6O+hslNqTHk7pvbS+YB5+05P
 
   matrix:
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      TOOLCHAIN: "ninja-vs-15-2017-win64-cxx17"
+    - TOOLCHAIN: "ninja-vs-15-2017-win64-cxx17"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      TOOLCHAIN: "nmake-vs-15-2017-win64-cxx17"
+    - TOOLCHAIN: "nmake-vs-15-2017-win64-cxx17"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      TOOLCHAIN: "vs-15-2017-win64-cxx17"
+    - TOOLCHAIN: "vs-15-2017-win64-cxx17"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TOOLCHAIN: "vs-14-2015-sdk-8-1"
+    - TOOLCHAIN: "vs-14-2015-sdk-8-1"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TOOLCHAIN: "mingw-cxx17"
+    - TOOLCHAIN: "mingw-cxx17"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      TOOLCHAIN: "msys-cxx17"
+    - TOOLCHAIN: "msys-cxx17"
       PROJECT_DIR: examples\benchmark
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 install:
   # Python 3
   - cmd: set PATH=C:\Python34-x64;C:\Python34-x64\Scripts;%PATH%
 
-  # Install Python package 'requests'
+  # Install Python package 'requests', 'gitpython'
   - cmd: pip install requests
+  - cmd: pip install gitpython
 
   # Install latest Polly toolchains and scripts
   - cmd: appveyor DownloadFile https://github.com/ruslo/polly/archive/master.zip
@@ -57,6 +58,11 @@ install:
   # (For MinGW make to work correctly sh.exe must NOT be in your path)
   # * http://stackoverflow.com/a/3870338/2288008
   - cmd: set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+
+  # Save git.exe in HUNTER_GIT_EXECUTABLE for upload
+  # * https://docs.hunter.sh/en/latest/reference/user-variables.html#hunter-git-executable
+  # Variable will be used in CMake so it's okay to use Unix style '/'
+  - cmd: set HUNTER_GIT_EXECUTABLE=C:/Program Files/Git/bin/git.exe
 
   - cmd: set MINGW_PATH=C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64\bin
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2015, Ruslan Baratov
+# Copyright (c) 2015, 2018 Ruslan Baratov
 # All rights reserved.
 
 include(hunter_status_debug)
@@ -26,13 +26,27 @@ function(hunter_create_args_file args filename)
   #       "A", "B", "C"
   #   'var_value' will have values:
   #       "value1", "value2", "value3", "value4"
-  file(REMOVE "${filename}")
-  file(WRITE "${filename}" "") # create empty file if no option
+  set(filename_nolf "${filename}.NOLF")
+  file(REMOVE "${filename_nolf}")
+  file(WRITE "${filename_nolf}" "") # create empty file if no option
   set(var_name "")
   foreach(entry ${args})
-    string(FIND "${entry}" "=" update_var)
-    if(update_var EQUAL -1)
+    set(appending_mode FALSE)
+
+    string(FIND "${entry}" "=" equal_symbol_index)
+    if(equal_symbol_index EQUAL -1)
       # There is no '=' symbol - appending mode
+      set(appending_mode TRUE)
+    endif()
+
+    string(REGEX MATCH "^--.*" starts_with_double_dash "${entry}")
+    if(NOT "${starts_with_double_dash}" STREQUAL "")
+      # Assumed that variable name doesn't start with '--' and we are appending.
+      # Needed to pass options like `--foo=a,b,c,d`
+      set(appending_mode TRUE)
+    endif()
+
+    if(appending_mode)
       if(NOT var_name)
         hunter_user_error(
             "${bad_message} (expected '=' symbol): ${args}"
@@ -53,13 +67,13 @@ function(hunter_create_args_file args filename)
         )
       endif()
       ### -- end
-      file(APPEND "${filename}" "set(")
+      file(APPEND "${filename_nolf}" "set(")
       file(
           APPEND
-          "${filename}"
+          "${filename_nolf}"
           "\"${var_name}\" \"\${${var_name}}\" \"${var_value}\""
       )
-      file(APPEND "${filename}" " CACHE INTERNAL \"\")\n")
+      file(APPEND "${filename_nolf}" " CACHE INTERNAL \"\")\n")
       hunter_status_debug(
           "Add extra CMake args: '${var_name}' += '${var_value}'"
       )
@@ -97,12 +111,27 @@ function(hunter_create_args_file args filename)
       endif()
       ### -- end
 
-      file(APPEND "${filename}" "set(")
-      file(APPEND "${filename}" "\"${var_name}\" \"${var_value}\"")
-      file(APPEND "${filename}" " CACHE INTERNAL \"\")\n")
+      file(APPEND "${filename_nolf}" "set(")
+
+      if("${var_value}" STREQUAL "\"\"")
+        file(APPEND "${filename_nolf}" "\"${var_name}\" \"\"")
+      else()
+        file(APPEND "${filename_nolf}" "\"${var_name}\" \"${var_value}\"")
+      endif()
+
+      file(APPEND "${filename_nolf}" " CACHE INTERNAL \"\")\n")
       hunter_status_debug(
           "Add extra CMake args: '${var_name}' = '${var_value}'"
       )
     endif()
   endforeach()
+
+  # About '@ONLY': no substitutions expected but COPYONLY can't be
+  # used with NEWLINE_STYLE
+  configure_file(
+      "${filename_nolf}"
+      "${filename}"
+      @ONLY
+      NEWLINE_STYLE LF
+  )
 endfunction()
