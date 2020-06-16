@@ -76,13 +76,13 @@ HUNTER_ROOT
   Hunter packages to default location
 * You can set :ref:`environment variable <env hunter root>`
   with the same name to avoid specifying it for every project
-* See `HunterGate <https://github.com/hunter-packages/gate#effects>`__
+* See `HunterGate <https://github.com/cpp-pm/gate#effects>`__
 
 .. warning::
 
   If you manually cloned Hunter repository for development purposes the values
   of ``URL`` and ``SHA1`` of ``HunterGate`` will be ignored, see
-  `notes <https://github.com/hunter-packages/gate#notes>`__ and
+  `notes <https://github.com/cpp-pm/gate#notes>`__ and
   `testing <https://github.com/ruslo/hunter/wiki/dev.hunter.root>`__ hints.
 
 HUNTER_STATUS_PRINT
@@ -345,6 +345,16 @@ To create new URLs the following template is used:
 
     This is the same structure as Hunter uses for its own :ref:`Download <layout deployed download>` directory.
 
+.. note::
+
+    ``HUNTER_DOWNLOAD_SERVER`` will be applied only to packages enabled with the standard
+    ``VERSION`` variant of :ref:`hunter_config` entries, which is the case for all default
+    Hunter package definitions.  Custom package definitions introduced with a ``URL``/``SHA1``
+    variant on :ref:`hunter_config` in a project's local configuration, such as those included through
+    ``FILEPATH`` or ``LOCAL`` arguments to ``HunterGate()``, will be unaffected by this variable.
+    The ``git`` variants of :ref:`hunter_config`, namely ``GIT_SUBMODULE`` and ``GIT_SELF``, have no
+    transformable URL and are also unaffected by ``HUNTER_DOWNLOAD_SERVER``.
+
 .. _hunter tls verify:
 
 HUNTER_TLS_VERIFY
@@ -414,7 +424,7 @@ HUNTER_BINARY_DIR
 
 * Use external directory ``HUNTER_BINARY_DIR`` for building external projects.
   This variable can be used to fix
-  `"path too long" <https://docs.hunter.sh/en/latest/reference/errors/error.external.build.failed.html#windows>`__ error on windows
+  `"path too long" <https://hunter.readthedocs.io/en/latest/reference/errors/error.external.build.failed.html#windows>`__ error on windows
 
 .. _hunter disable install:
 

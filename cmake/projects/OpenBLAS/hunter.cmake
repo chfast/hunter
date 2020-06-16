@@ -10,6 +10,16 @@ include(hunter_pick_scheme)
 include(hunter_cmake_args)
 include(hunter_download)
 
+hunter_add_version(
+    PACKAGE_NAME
+    OpenBLAS
+    VERSION
+    0.3.7
+    URL
+    "https://github.com/xianyi/OpenBLAS/archive/v0.3.7.tar.gz"
+    SHA1
+    6a79b36d1bf73584a513139806d226f9189d621e
+)
 
 hunter_add_version(
     PACKAGE_NAME

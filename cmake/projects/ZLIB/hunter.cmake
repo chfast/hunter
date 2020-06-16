@@ -63,10 +63,52 @@ hunter_add_version(
     9ced8b310aa341af7f3584bac0b2d2a669d2178b
 )
 
+hunter_add_version(
+    PACKAGE_NAME
+    ZLIB
+    VERSION
+    "1.2.11-p1"
+    URL
+    "https://github.com/hunter-packages/zlib/archive/v1.2.11-p1.tar.gz"
+    SHA1
+    fbb8be77db5cb3f4d1b269f273a357d22ccc4b32
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    ZLIB
+    VERSION
+    "0.0.0-chromium-f87c2b10efb4-p0"
+    URL
+    "https://github.com/hunter-packages/chromium_zlib/archive/v0.0.0-f87c2b10efb4-p0.tar.gz"
+    SHA1
+    2fc1f19ef5ba48c415a614e56e1c12507f4676ab
+)
+
+hunter_add_version(
+    PACKAGE_NAME
+    ZLIB
+    VERSION
+    "0.0.0-chromium-f87c2b10efb4-p2"
+    URL
+    "https://github.com/cpp-pm/chromium_zlib/archive/v0.0.0-f87c2b10efb4-p2.tar.gz"
+    SHA1
+    20019f1dbfb154956067aa1df0e73e5185d794fa
+)
+
 hunter_pick_scheme(DEFAULT url_sha1_cmake)
 hunter_cacheable(ZLIB)
-hunter_download(PACKAGE_NAME ZLIB
+string(FIND "${HUNTER_ZLIB_VERSION}" "chromium" HUNTER_ZLIB_IS_CHROMIUM)
+if(NOT HUNTER_ZLIB_IS_CHROMIUM EQUAL -1)
+  # Is a chromium variant
+  hunter_download(PACKAGE_NAME ZLIB
+    PACKAGE_INTERNAL_DEPS_ID "1"
+  )
+else()
+  # Is a standard variant
+  hunter_download(PACKAGE_NAME ZLIB
     PACKAGE_INTERNAL_DEPS_ID "1"
     PACKAGE_UNRELOCATABLE_TEXT_FILES
     "share/pkgconfig/zlib.pc"
-)
+  )
+endif()
